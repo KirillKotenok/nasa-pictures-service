@@ -27,7 +27,7 @@ public class PictureService {
                 .map(JsonNode::asText)
                 .map(this::createPicture)
                 .max(Comparator.comparing(Picture::getSize))
-                .orElseThrow(() -> new NoSuchElementException("Cannot find largest picture!"));
+                .orElseThrow(() -> new NoSuchElementException("No pictures found!"));
     }
 
     private Picture createPicture(String imgSrc) {
