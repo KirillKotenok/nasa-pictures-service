@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class Picture {
     private String imgSrc;
     private Long size;
-    private byte[] img;
 }
