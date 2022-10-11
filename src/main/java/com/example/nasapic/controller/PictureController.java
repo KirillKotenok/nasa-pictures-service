@@ -18,6 +18,6 @@ public class PictureController {
     @GetMapping(value = {"/mars/pictures/largest/{sol}","/mars/pictures/largest/{sol}/{camera}"}
             ,produces = MediaType.IMAGE_JPEG_VALUE)
     public Mono<byte[]> getLargestPicture(@PathVariable String sol, @PathVariable(required = false) String camera) {
-        return service.getLargestPic(sol,camera);
+        return service.getLargestPhoto(sol,camera);
     }
 }
