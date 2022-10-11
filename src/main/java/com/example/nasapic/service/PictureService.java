@@ -1,7 +1,7 @@
 package com.example.nasapic.service;
 
-import com.example.nasapic.entity.Picture;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.example.nasapic.entity.Photo;
+import com.example.nasapic.entity.Photos;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,23 +19,16 @@ public class PictureService {
 
     @SneakyThrows
     @Cacheable("nasaUrl")
-    public Picture getLargestPic(String nasaUrl) {
-        return template.getForObject(URI.create(nasaUrl), JsonNode.class)
-                .get("photos")
-                .findValues("img_src")
+    public byte[] getLargestPic(String sol, String camera) {
+        return getImgBytes(template.getForObject(URI.create(NasaUrlUtils.getUrl(sol, camera)), Photos.class).getPhotos()
                 .stream()
-                .map(JsonNode::asText)
-                .map(this::createPicture)
-                .max(Comparator.comparing(Picture::getSize))
-                .orElseThrow(() -> new NoSuchElementException("No pictures found!"));
+                .peek(this::createPhoto)
+                .max(Comparator.comparing(Photo::getSize))
+                .orElseThrow(() -> new NoSuchElementException("No pictures found!")).getUrl());
     }
 
-    private Picture createPicture(String imgSrc) {
-        var picture = new Picture();
-        picture.setImgSrc(imgSrc);
-        picture.setSize(getPictureSize(picture.getImgSrc()));
-        picture.setImg(getImgBytes(picture.getImgSrc()));
-        return picture;
+    private void createPhoto(Photo photo) {
+        photo.setSize(getPictureSize(photo.getUrl()));
     }
 
     private byte[] getImgBytes(String imgSrc) {

@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Picture {
-    private String imgSrc;
-    private Long size;
-    private byte[] img;
+public class Photos {
+    private List<Photo> photos = new ArrayList<>();
 }
